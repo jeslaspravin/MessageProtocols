@@ -1,0 +1,27 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "MessageProtocols",
+	"Description": "",
+	"Category": "Messaging",
+	"CreatedBy": "Jeslas Pravin",
+	"CreatedByURL": "jeslaspravin.com",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"Installed": false,
+	"Modules": [
+    {
+      "Name": "MessageProtocols",
+      "Type": "Runtime",
+      "LoadingPhase": "PreDefault",
+      "WhitelistPlatforms": [
+        "Win32",
+        "Win64"
+      ]
+    }
+	]
+}
