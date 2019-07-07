@@ -18,28 +18,28 @@ class UUDPConnection : public UBaseConnection
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection")
-		int32 bufferSize = 2 * 1024 * 1024;
+		 int32 bufferSize = 2 * 1024 * 1024;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection")
-		FString connectionName = "Unreal UDP Socket";
+		 FString connectionName = "Unreal UDP Socket";
 
 	// Whether to receive only from provided receive from IP 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Receiver")
-		bool bBlockUnknownReceiver=true;
+		 bool bBlockUnknownReceiver=true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Receiver", meta = (EditCondition = "bBlockUnknownReceiver"))
-		FString receiveFromIp;
+		 FString receiveFromIp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Listener")
-		FString listenAtIp;
+		 FString listenAtIp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Listener")
-		int32 listenAtPort;
+		 int32 listenAtPort;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sender")
-		FString broadcasterToIp;
+		 FString broadcasterToIp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sender")
-		int32 broadcasterToPort;
+		 int32 broadcasterToPort;
 
 
 private:

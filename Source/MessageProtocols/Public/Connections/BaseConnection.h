@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Templates/SubclassOf.h"
 #include "ParserProtocols/BaseParserProtocol.h"
+#include "Connections/ConnectionConfigs.h"
 #include "BaseConnection.generated.h"
 
 class FProtocolsThreadBase;
@@ -127,6 +128,24 @@ public:
 		static FString StructToJson(UProperty* StructVariable);
 
 	DECLARE_FUNCTION(execStructToJson);
+
+	template<typename T>
+	void getConfig(T& config);
+
+	template<>
+	void getConfig<FUDPConnectionConfig>(FUDPConnectionConfig& config);
+	
+	template<>
+	void getConfig<FTCPUnicastConnectionConfig>(FTCPUnicastConnectionConfig& config);
+
+	template<typename T>
+	void setConfig(T& config);
+
+	template<>
+	void setConfig<FUDPConnectionConfig>(FUDPConnectionConfig& config);
+
+	template<>
+	void setConfig<FTCPUnicastConnectionConfig>(FTCPUnicastConnectionConfig& config);
 };
 
 template<typename T>  
@@ -145,3 +164,14 @@ template<typename T> T UBaseConnection::asStruct(bool& success, int32 index /*= 
 	return retVal;
 }
 
+template<typename T>
+void UBaseConnection::getConfig(T& config)
+{
+	checkf(false, TEXT("Not Implemented get Config"));
+}
+
+template<typename T>
+void UBaseConnection::setConfig(T& config)
+{
+	checkf(false, TEXT("Not Implemented set Config"));
+}

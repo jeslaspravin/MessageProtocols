@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interfaces/IPv4/IPv4Endpoint.h"
-#include "Sockets.h"
 #include "Connections/TCPConnection.h"
+#include "Interfaces/IPv4/IPv4Endpoint.h"
 #include "TCPUnicastConnection.generated.h"
+
+class FSocket;
 
 /**
  * 
@@ -19,20 +20,20 @@ class UTCPUnicastConnection : public UTCPConnection
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection")
-		FString connectToIp;
+		 FString connectToIp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection")
-		int32 connectToPort;
+		 int32 connectToPort;
 
 	// Allow to connect to new connection in case new one tries to connect. Disconnects previous connection
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection")
-		bool bAllowSwitching = false;
+		 bool bAllowSwitching = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection")
-		bool bAllowMatchingOnly=true;
+		 bool bAllowMatchingOnly=true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection")
-		bool bMatchIpOnly = true;
+		 bool bMatchIpOnly = true;
 
 private:
 

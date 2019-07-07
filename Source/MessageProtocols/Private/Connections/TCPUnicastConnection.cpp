@@ -2,7 +2,49 @@
 
 
 #include "TCPUnicastConnection.h"
+#include "Sockets.h"
 #include "MessageProtocolPrivatePCH.h"
+
+
+template<>
+void UBaseConnection::getConfig(FTCPUnicastConnectionConfig& config)
+{
+	const UTCPUnicastConnection* connection = Cast<UTCPUnicastConnection>(this);
+	if (connection)
+	{
+		config.connectToIp = connection->connectToIp;
+		config.connectToPort = connection->connectToPort;
+		config.listenerIp = connection->listenerIp;
+		config.listenerPort = connection->listenerPort;
+		config.listenerName = connection->listenerName;
+		config.receiveBufferSize = connection->receiveBufferSize;
+		config.bAllowSwitching = connection->bAllowSwitching;
+		config.bAllowMatchingOnly = connection->bAllowMatchingOnly;
+		config.bMatchIpOnly = connection->bMatchIpOnly;
+	}
+	else
+		LOG_ERR("Cannot get config for TCP from non TCP connection");
+}
+
+template<>
+void UBaseConnection::setConfig(FTCPUnicastConnectionConfig& config)
+{
+	UTCPUnicastConnection* connection = Cast<UTCPUnicastConnection>(this);
+	if (connection)
+	{
+		connection->connectToIp = config.connectToIp;
+		connection->connectToPort = config.connectToPort;
+		connection->listenerIp = config.listenerIp;
+		connection->listenerPort = config.listenerPort;
+		connection->listenerName = config.listenerName;
+		connection->receiveBufferSize = config.receiveBufferSize;
+		connection->bAllowSwitching = config.bAllowSwitching;
+		connection->bAllowMatchingOnly = config.bAllowMatchingOnly;
+		connection->bMatchIpOnly = config.bMatchIpOnly;
+	}
+	else
+		LOG_ERR("Cannot set TCP config for non TCP connection");
+}
 
 void UTCPUnicastConnection::tryAndConnectSocket()
 {
