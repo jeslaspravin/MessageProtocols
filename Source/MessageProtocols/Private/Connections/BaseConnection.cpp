@@ -25,6 +25,16 @@ void UBaseConnection::clearBuffers()
 	rawDataReceived.Empty(maxDataToReceive);
 }
 
+void UBaseConnection::getConfigInternal(void* const config)
+{
+	unimplemented()
+}
+
+void UBaseConnection::setConfigInternal(void* const config)
+{
+	unimplemented()
+}
+
 void UBaseConnection::appendToReceived(TArray<FProcessedData>&& data)
 {
 	rawDataReceived.Append(data);
@@ -184,6 +194,11 @@ bool UBaseConnection::clearReceivedData()
 		return true;
 	}
 	return false;
+}
+
+void UBaseConnection::flushData()
+{
+	sendData();
 }
 
 DEFINE_FUNCTION(UBaseConnection::execStructToJson)

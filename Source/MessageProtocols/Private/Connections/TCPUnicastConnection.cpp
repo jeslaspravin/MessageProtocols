@@ -6,46 +6,6 @@
 #include "MessageProtocolPrivatePCH.h"
 
 
-template<>
-void UBaseConnection::getConfig(FTCPUnicastConnectionConfig& config)
-{
-	const UTCPUnicastConnection* connection = Cast<UTCPUnicastConnection>(this);
-	if (connection)
-	{
-		config.connectToIp = connection->connectToIp;
-		config.connectToPort = connection->connectToPort;
-		config.listenerIp = connection->listenerIp;
-		config.listenerPort = connection->listenerPort;
-		config.listenerName = connection->listenerName;
-		config.receiveBufferSize = connection->receiveBufferSize;
-		config.bAllowSwitching = connection->bAllowSwitching;
-		config.bAllowMatchingOnly = connection->bAllowMatchingOnly;
-		config.bMatchIpOnly = connection->bMatchIpOnly;
-	}
-	else
-		LOG_ERR("Cannot get config for TCP from non TCP connection");
-}
-
-template<>
-void UBaseConnection::setConfig(FTCPUnicastConnectionConfig& config)
-{
-	UTCPUnicastConnection* connection = Cast<UTCPUnicastConnection>(this);
-	if (connection)
-	{
-		connection->connectToIp = config.connectToIp;
-		connection->connectToPort = config.connectToPort;
-		connection->listenerIp = config.listenerIp;
-		connection->listenerPort = config.listenerPort;
-		connection->listenerName = config.listenerName;
-		connection->receiveBufferSize = config.receiveBufferSize;
-		connection->bAllowSwitching = config.bAllowSwitching;
-		connection->bAllowMatchingOnly = config.bAllowMatchingOnly;
-		connection->bMatchIpOnly = config.bMatchIpOnly;
-	}
-	else
-		LOG_ERR("Cannot set TCP config for non TCP connection");
-}
-
 void UTCPUnicastConnection::tryAndConnectSocket()
 {
 	if (!mutex.TryLock())
@@ -108,6 +68,7 @@ bool UTCPUnicastConnection::openConnection()
 
 bool UTCPUnicastConnection::closeConnection()
 {
+	flushData();
 	ISocketSubsystem* socketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
 	if (connectedSocket)
 	{
@@ -190,4 +151,37 @@ void UTCPUnicastConnection::sendData()
 		}
 		dataToSend.Empty();
 	}
+}
+
+void UTCPUnicastConnection::getConfigInternal(void* const config)
+{
+	FTCPUnicastConnectionConfig* const configPtr = reinterpret_cast<FTCPUnicastConnectionConfig* const>(config);
+	const UTCPUnicastConnection* connection = this;
+	
+	configPtr->connectToIp = connection->connectToIp;
+	configPtr->connectToPort = connection->connectToPort;
+	configPtr->listenerIp = connection->listenerIp;
+	configPtr->listenerPort = connection->listenerPort;
+	configPtr->listenerName = connection->listenerName;
+	configPtr->receiveBufferSize = connection->receiveBufferSize;
+	configPtr->bAllowSwitching = connection->bAllowSwitching;
+	configPtr->bAllowMatchingOnly = connection->bAllowMatchingOnly;
+	configPtr->bMatchIpOnly = connection->bMatchIpOnly;
+
+}
+
+void UTCPUnicastConnection::setConfigInternal(void* const config)
+{
+	FTCPUnicastConnectionConfig* const configPtr = reinterpret_cast<FTCPUnicastConnectionConfig * const>(config);
+	UTCPUnicastConnection* connection = this;
+
+	connection->connectToIp = configPtr->connectToIp;
+	connection->connectToPort = configPtr->connectToPort;
+	connection->listenerIp = configPtr->listenerIp;
+	connection->listenerPort = configPtr->listenerPort;
+	connection->listenerName = configPtr->listenerName;
+	connection->receiveBufferSize = configPtr->receiveBufferSize;
+	connection->bAllowSwitching = configPtr->bAllowSwitching;
+	connection->bAllowMatchingOnly = configPtr->bAllowMatchingOnly;
+	connection->bMatchIpOnly = configPtr->bMatchIpOnly;
 }

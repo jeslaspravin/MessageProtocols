@@ -5,5 +5,6 @@
 
 float UMessageProtocolSettings::getSleepDuration()
 {
-	return 1.0f/FMath::Clamp((float)(GetMutableDefault<UMessageProtocolSettings>()->maxFrequency), 1.0f, 60.0f);
+	UMessageProtocolSettings* messageSettings=GetMutableDefault<UMessageProtocolSettings>();
+	return messageSettings != nullptr?1.0f/FMath::Clamp((float)(messageSettings->maxFrequency), 1.0f, 60.0f):0.0f;
 }

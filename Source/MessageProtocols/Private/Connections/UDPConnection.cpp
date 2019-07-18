@@ -6,46 +6,6 @@
 #include "MessageProtocolSettings.h"
 #include "MessageProtocolPrivatePCH.h"
 
-
-template<>
-void UBaseConnection::getConfig(FUDPConnectionConfig& config)
-{
-	const UUDPConnection* connection = Cast<UUDPConnection>(this);
-	if (connection)
-	{
-		config.bBlockUnknownReceiver = connection->bBlockUnknownReceiver;
-		config.bufferSize = connection->bufferSize;
-		config.broadcasterToIp = connection->broadcasterToIp;
-		config.broadcasterToPort = connection->broadcasterToPort;
-		config.connectionName = connection->connectionName;
-		config.listenAtIp = connection->listenAtIp;
-		config.listenAtPort = connection->listenAtPort;
-		config.receiveFromIp = connection->receiveFromIp;
-	}
-	else
-		LOG_ERR("Cannot get config for UDP from non UDP connection");
-}
-
-
-template<>
-void UBaseConnection::setConfig(FUDPConnectionConfig& config)
-{
-	UUDPConnection* connection = Cast<UUDPConnection>(this);
-	if (connection)
-	{
-		connection->bBlockUnknownReceiver = config.bBlockUnknownReceiver;
-		connection->bufferSize = config.bufferSize;
-		connection->broadcasterToIp = config.broadcasterToIp;
-		connection->broadcasterToPort = config.broadcasterToPort;
-		connection->connectionName = config.connectionName;
-		connection->listenAtIp = config.listenAtIp;
-		connection->listenAtPort = config.listenAtPort;
-		connection->receiveFromIp = config.receiveFromIp;
-	}
-	else
-		LOG_ERR("Cannot set UDP config for non UDP connection");
-}
-
 void UUDPConnection::recv(const FArrayReaderPtr& arrayReaderPtr, const FIPv4Endpoint& endPt)
 {
 	if (!bBlockUnknownReceiver || endPt.Address == receiveFromAddress)
@@ -178,6 +138,7 @@ bool UUDPConnection::openConnection()
 
 bool UUDPConnection::closeConnection()
 {
+	flushData();
 	ISocketSubsystem* socketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
 
 	if (udpSocket)
@@ -246,4 +207,32 @@ void UUDPConnection::sendData()
 	{
 		LOG_ERR("No broadcaster available to send the requested data");
 	}
+}
+
+void UUDPConnection::getConfigInternal(void* const config)
+{
+	const UUDPConnection* connection = this;
+	FUDPConnectionConfig* const configPtr = reinterpret_cast<FUDPConnectionConfig * const>(config);
+	configPtr->bBlockUnknownReceiver = connection->bBlockUnknownReceiver;
+	configPtr->bufferSize = connection->bufferSize;
+	configPtr->broadcasterToIp = connection->broadcasterToIp;
+	configPtr->broadcasterToPort = connection->broadcasterToPort;
+	configPtr->connectionName = connection->connectionName;
+	configPtr->listenAtIp = connection->listenAtIp;
+	configPtr->listenAtPort = connection->listenAtPort;
+	configPtr->receiveFromIp = connection->receiveFromIp;
+}
+
+void UUDPConnection::setConfigInternal(void* const config)
+{
+	UUDPConnection* connection = this;
+	FUDPConnectionConfig* const configPtr = reinterpret_cast<FUDPConnectionConfig * const>(config);
+	connection->bBlockUnknownReceiver = configPtr->bBlockUnknownReceiver;
+	connection->bufferSize = configPtr->bufferSize;
+	connection->broadcasterToIp = configPtr->broadcasterToIp;
+	connection->broadcasterToPort = configPtr->broadcasterToPort;
+	connection->connectionName = configPtr->connectionName;
+	connection->listenAtIp = configPtr->listenAtIp;
+	connection->listenAtPort = configPtr->listenAtPort;
+	connection->receiveFromIp = configPtr->receiveFromIp;
 }

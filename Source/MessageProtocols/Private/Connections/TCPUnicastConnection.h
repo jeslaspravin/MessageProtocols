@@ -61,4 +61,10 @@ protected:
 	virtual void receiveData() override;
 
 	virtual void sendData() override;
+
+	virtual void getConfigInternal(void* const config) override;
+
+
+	virtual void setConfigInternal(void* const config) override;
+
 };

@@ -63,11 +63,17 @@ private:
 protected:
 
 	virtual bool openConnection();
-	virtual bool closeConnection() { return true; }
+	virtual bool closeConnection() { 
+		return true;
+	}
 	virtual void receiveData() {}
 	virtual void sendData() {}
+	virtual void flushData();
 
 	virtual void clearBuffers();
+
+	virtual void getConfigInternal(void* const config);
+	virtual void setConfigInternal(void* const config);
 
 	void appendToReceived(TArray<FProcessedData>&& data);
 	void appendToReceived(TArray<FProcessedData>& data);
@@ -118,7 +124,7 @@ public:
 	// Mostly used after successful reading
 	UFUNCTION(BlueprintCallable, Category = "Data")
 		bool clearReceivedData();
-
+	
 	template<typename T> 
 	void sendStruct(T& structToSend);
 
@@ -132,20 +138,8 @@ public:
 	template<typename T>
 	void getConfig(T& config);
 
-	template<>
-	void getConfig<FUDPConnectionConfig>(FUDPConnectionConfig& config);
-	
-	template<>
-	void getConfig<FTCPUnicastConnectionConfig>(FTCPUnicastConnectionConfig& config);
-
 	template<typename T>
 	void setConfig(T& config);
-
-	template<>
-	void setConfig<FUDPConnectionConfig>(FUDPConnectionConfig& config);
-
-	template<>
-	void setConfig<FTCPUnicastConnectionConfig>(FTCPUnicastConnectionConfig& config);
 };
 
 template<typename T>  
@@ -167,11 +161,11 @@ template<typename T> T UBaseConnection::asStruct(bool& success, int32 index /*= 
 template<typename T>
 void UBaseConnection::getConfig(T& config)
 {
-	checkf(false, TEXT("Not Implemented get Config"));
+	getConfigInternal(&config);
 }
 
 template<typename T>
 void UBaseConnection::setConfig(T& config)
 {
-	checkf(false, TEXT("Not Implemented set Config"));
+	setConfigInternal(&config);
 }

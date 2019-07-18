@@ -24,6 +24,8 @@ private:
 	bool isRunningThead;
 	
 	TArray<UWeakConnectionsPtr> connections;
+	// In seconds
+	float sleepDuration = 0.15f;
 
 	FString threadName;
 

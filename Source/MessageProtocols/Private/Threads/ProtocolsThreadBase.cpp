@@ -31,6 +31,7 @@ bool FProtocolsThreadBase::Init()
 	isProcessing = false;
 	isRunningThead = true;
 	syncEvent=FPlatformProcess::GetSynchEventFromPool(false);
+	sleepDuration = UMessageProtocolSettings::getSleepDuration();
 	return isRunningThead;
 }
 
@@ -121,7 +122,7 @@ uint32 FProtocolsThreadBase::Run()
 		// To let insertion or deletion of connections
 		syncEvent->Trigger();
 
-		FPlatformProcess::Sleep(UMessageProtocolSettings::getSleepDuration());
+		FPlatformProcess::Sleep(sleepDuration);
 	}
 	return 0;
 }
